@@ -14,6 +14,7 @@
 		8E2218A632E5BD6C224D23E7 /* ThoughtThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = B414A8FE119E376D32AB4224 /* ThoughtThread.swift */; };
 		91136A85577504E53FDBDDC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF18C01954EA4580B0A0B0 /* ContentView.swift */; };
 		CC6EBE621160DC3B62473661 /* ThoughtCaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D694FA30ED5039BAEEAB58 /* ThoughtCaptureApp.swift */; };
+		E35087F155607D0F5079BB65 /* EntryTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5FDA7D3FCB6B775BA606BA /* EntryTimeline.swift */; };
 		E61997698B0B1A6271C11EEB /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F543A738BB26EDBEC2DFA326 /* CaptureView.swift */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 		02B57AC4CCF42680E6E12518 /* ThreadDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadDetailView.swift; sourceTree = "<group>"; };
 		62FF18C01954EA4580B0A0B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		78D0C82645133E656DCCAFE7 /* ThreadListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadListView.swift; sourceTree = "<group>"; };
+		9E5FDA7D3FCB6B775BA606BA /* EntryTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTimeline.swift; sourceTree = "<group>"; };
 		B414A8FE119E376D32AB4224 /* ThoughtThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtThread.swift; sourceTree = "<group>"; };
 		B478CB895FA770E32F4CD247 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C544F2DD906E9605D6A53C56 /* ThreadEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadEntry.swift; sourceTree = "<group>"; };
@@ -50,6 +52,14 @@
 			path = ThoughtCapture;
 			sourceTree = "<group>";
 		};
+		4B936CD56B68EEB4C5FEAB99 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				9E5FDA7D3FCB6B775BA606BA /* EntryTimeline.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		512901B542278533B90690AC /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +67,7 @@
 				62FF18C01954EA4580B0A0B0 /* ContentView.swift */,
 				02B57AC4CCF42680E6E12518 /* ThreadDetailView.swift */,
 				78D0C82645133E656DCCAFE7 /* ThreadListView.swift */,
+				4B936CD56B68EEB4C5FEAB99 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -144,6 +155,7 @@
 			files = (
 				E61997698B0B1A6271C11EEB /* CaptureView.swift in Sources */,
 				91136A85577504E53FDBDDC7 /* ContentView.swift in Sources */,
+				E35087F155607D0F5079BB65 /* EntryTimeline.swift in Sources */,
 				CC6EBE621160DC3B62473661 /* ThoughtCaptureApp.swift in Sources */,
 				8E2218A632E5BD6C224D23E7 /* ThoughtThread.swift in Sources */,
 				68E9F492D7817829B7AEDF3E /* ThreadDetailView.swift in Sources */,

@@ -134,28 +134,8 @@ struct ThreadCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(Array(previewEntries.enumerated()), id: \.element.id) { index, entry in
-                let isLast = index == previewEntries.count - 1
-
-                HStack(alignment: .top, spacing: 14) {
-                    VStack(spacing: 0) {
-                        Circle()
-                            .fill(Color(.systemGray2))
-                            .frame(width: 8, height: 8)
-
-                        if !isLast {
-                            Rectangle()
-                                .fill(Color(.systemGray3))
-                                .frame(width: 1.5)
-                                .frame(maxHeight: .infinity)
-                        }
-                    }
-                    .frame(width: 8)
-                    .padding(.top, 6)
-
-                    entryContent(entry)
-                }
-                .padding(.bottom, isLast ? 0 : 4)
+            EntryTimeline(entries: previewEntries) { entry in
+                entryContent(entry)
             }
 
             HStack {
