@@ -1,7 +1,12 @@
 # AGENTS.md: Thought Capture Development Guidelines
 
 ## Project Status
-**Phase:** Pre-development (planning/research complete). Target: iOS app using SwiftUI, SwiftData.
+**Phase:** Pre-development (planning/research complete).
+
+## Project Instructions
+- Preserve product intent for V1: local-first behavior, no network dependencies, and fast startup
+- Keep all changes aligned with repository workflows and tracking expectations in this file
+- Do not add framework-specific coding rules here; use skills for technical implementation guidance
 
 ## Build & Test Commands
 ```bash
@@ -11,35 +16,35 @@ xcodebuild test -only-testing: TargetName  # Run single test
 swift test                                 # Run with Swift PM
 ```
 
-## Architecture & Structure
-- **Language:** Swift + SwiftUI (iOS 17+)
-- **Data Layer:** SwiftData (local-first, on-device only for V1)
-- **File Storage:** App document directory for audio/photos
-- **Core Model:** Thread → Entries (1-to-many). Entry types: text, voice, photo gallery
-- **App Pattern:** MVVM
-- **Key Frameworks:** AVFoundation (audio), PhotosUI (photos), Speech (transcription), WidgetKit (quick capture)
-- **No external dependencies:** All native iOS frameworks
+## Local Skills (.agents/skills)
 
-## Code Style Guidelines
-- **Naming:** camelCase for properties/methods, PascalCase for types
-- **Structure:** One file per view/model (Swift convention)
-- **Error Handling:** Use Result<T, Error> and Swift's throwing functions
-- **Comments:** Document non-obvious logic; avoid restating code
-- **Imports:** Organize alphabetically, group by framework type
-- **No trailing commas:** Swift convention
+Available project skills:
+- **Tech Expert (Primary):** `@.agents/skills/swiftui-expert-skill/SKILL.md`
+- **Memory Keeper:** `@.agents/skills/memory-keeper/SKILL.md`
 
-## SwiftUI Patterns (see @.agents/skills/swiftui-expert-skill/SKILL.md)
-**State Management:** `@State` (private, internal), `@Binding` (child modifies parent), `@StateObject` (owned), `@ObservedObject` (injected), `@Bindable` (iOS 17+ injected `@Observable`)
-**View Composition:** Extract complex views to subviews, use modifiers over conditionals, keep `body` simple and pure, no side effects in view body
-**Performance:** Pass only needed values, eliminate unnecessary dependencies, use stable identity in `ForEach`, avoid inline filtering, no `AnyView` in lists, gate geometry updates by thresholds
-**Animations:** Use `.animation(_:value:)` with value parameter, `withAnimation` for event-driven, transitions outside conditionals, prefer transforms over layout changes
-**Accessibility:** Prefer `Button` over `onTapGesture`, use `@ScaledMetric` for Dynamic Type, group related elements, provide `accessibilityLabel` when unclear
+Usage guidance:
+- Use the primary technical skill for all programming tasks and implementation decisions
+- Use Memory Keeper for preserving context and session continuity
+- Keep this AGENTS file operational; keep technical rules in skill files
 
-## Notes for Agents
-- Minimize dependencies (all native frameworks)
-- Performance critical: app launch < 1 second
-- Local-first: no network calls in V1
-- Test coverage expected for data models and transcription logic
+## Beads Workflow (.beads/README.md)
+
+This repository uses Beads for issue tracking. Track work in `.beads/issues.jsonl` using `bd` commands.
+
+Essential commands:
+```bash
+bd create "Issue title"
+bd list
+bd show <issue-id>
+bd update <issue-id> --status in_progress
+bd update <issue-id> --status done
+bd sync
+```
+
+Beads expectations:
+- Create and maintain Beads issues for follow-up work
+- Keep issue status accurate (`open`, `in_progress`, `done`)
+- Run `bd sync` during session completion before `git push`
 
 ## Landing the Plane (Session Completion)
 
