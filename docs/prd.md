@@ -133,10 +133,11 @@ App Launch
 | Search success rate | ≥ 80% of searches result in a tap on a result |
 | 30-day retention | ≥ 40% |
 
-## Future Phases
+## Phases
 
 | Phase | Features |
 |---|---|
-| **V2** | iCloud sync, macOS companion app |
-| **V3** | AI auto-organization, smart search, resurfacing/daily review |
-| **V4** | Monetization (freemium model), OCR for photo search, note linking |
+| **V1** | Thread-based notes, instant capture (< 1s), multi-format (text, multi-photo gallery), starring, local-only storage |
+| **V2** | Mind map (visualize connections between threads), daily review (resurface and reflect on recent/old notes)|
+| **V3** | Smart search (semantic/fuzzy — search by meaning, not just keywords), smart reminders (context-aware resurfacing based on time, patterns, relevance) |
+| **V4** | Voice recording, Voice-to-text transcription, full-text search, home screen widget, iCloud sync, macOS companion app  |
