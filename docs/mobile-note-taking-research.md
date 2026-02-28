@@ -146,6 +146,61 @@
 
 ---
 
+## 📝 CAPTURE TYPES ANALYSIS
+
+### 🔥 High Demand (Daily use, mainstream users)
+
+| Capture Type | What It Is | When It Happens | Example |
+|---|---|---|---|
+| **Fleeting Note** | Quick text dump, unstructured, raw thought | Commute, mid-conversation, before sleep | "Ask Mike about the Q3 budget gap" |
+| **Voice Memo** | Speak instead of type, hands-free | Driving, walking, cooking | Rambling 2-min idea while jogging |
+| **Photo Capture** | Snap a whiteboard, receipt, slide, handwriting | Meetings, events, shopping | Photo of a restaurant menu to revisit later |
+| **Checklist / To-Do** | Quick bulleted action items | After meetings, planning errands | "☐ Buy milk ☐ Call dentist ☐ Reply to Sarah" |
+| **Web Clip / Share Sheet** | Save a link, quote, or screenshot from another app | Browsing, social media, messaging | Share article from Twitter → saved with highlight |
+
+### 🟡 Medium Demand (Weekly use, power users & specific segments)
+
+| Capture Type | Who Wants It | Why |
+|---|---|---|
+| **Meeting Notes** (structured) | Professionals | Template: attendees, agenda, action items, decisions |
+| **Journal Entry** | Self-improvement, mental health users | Daily reflection, gratitude, mood tracking |
+| **Bookmark + Annotation** | Researchers, students | Save a source + add their own thoughts alongside it |
+| **Audio Recording + Transcript** | Journalists, students, PMs | Record a full meeting/lecture, get searchable text |
+| **Sketch / Doodle** | Creatives, visual thinkers | Quick diagram, UI wireframe, concept sketch |
+
+### 🔵 Low Demand (Niche, power-user territory — v2+ features)
+
+| Capture Type | Who Wants It | Why |
+|---|---|---|
+| **Mind Map** | Brainstormers, strategists | Visual idea exploration — but most users find it too complex on mobile |
+| **Canvas / Freeform Board** | Designers, planners | Spatial note arrangement (Apple Freeform, Miro-style) |
+| **Code Snippet** | Developers | Save a function, command, or config with syntax highlighting |
+| **Structured Data** (table, form) | Researchers, analysts | Comparison tables, data collection |
+| **Email-to-note** | Professionals | Forward an email and it becomes a note |
+
+### 📊 What Users Actually Do vs. What They Say
+
+| What They Say | What They Actually Do |
+|---|---|
+| "I want mind maps" | They try it once, then go back to bullet lists |
+| "I want rich formatting" | 90% of notes are plain text with line breaks |
+| "I need templates" | They use 1-2 templates max, then freeform everything |
+| "I want handwriting support" | Only iPad users — phone screens are too small |
+
+**The brutal truth:** On mobile, **80%+ of captures are just fleeting text notes and photos.** Everything else is nice-to-have. Users want to feel *capable* of doing more, but their actual behavior is overwhelmingly **short, fast, unstructured text.**
+
+### Capture Type Build Priority
+
+| Priority | Build This | Skip This (for now) |
+|---|---|---|
+| **P0** | Fleeting text, voice memo, photo capture, checklist | Mind map, canvas, handwriting |
+| **P1** | Web clip / share sheet, audio transcription | Code snippets, structured data |
+| **P2** | Templates (meeting notes, journal), sketch | Email-to-note, freeform board |
+
+**The winning move:** Nail fleeting capture so well that users *stop texting themselves*. That's your real competitor — not Notion or Obsidian, but the user's own SMS thread and camera roll.
+
+---
+
 ## 🎯 STRATEGIC SUMMARY
 
 | Priority | Invest In | Because |
