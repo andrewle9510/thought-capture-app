@@ -4,10 +4,15 @@ import SwiftData
 
 struct ThreadDetailView: View {
     @Bindable var thread: ThoughtThread
-    @State private var appendText = ""
+    @State private var inputText = ""
     @State private var selectedPhotos: [PhotosPickerItem] = []
-    @State private var loadedImages: [UIImage] = []
+    @State private var newImages: [UIImage] = []
+    @State private var existingPhotoFileNames: [String] = []
+    @State private var editingEntry: ThreadEntry?
     @FocusState private var isInputFocused: Bool
+    @Environment(\.appearanceConfig) private var config
+
+    private var isEditing: Bool { editingEntry != nil }
 
     private var sortedEntries: [ThreadEntry] {
         thread.entries.sorted { $0.createdAt < $1.createdAt }
@@ -28,16 +33,14 @@ struct ThreadDetailView: View {
                     EntryTimeline(entries: sortedEntries) { entry in
                         entryContent(entry)
                     }
-                    .padding(16)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
                     .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
 
             Divider()
 
-            appendBar
+            inputBar
         }
         .navigationTitle("Thread")
         .navigationBarTitleDisplayMode(.inline)
@@ -54,15 +57,31 @@ struct ThreadDetailView: View {
         .onChange(of: selectedPhotos) { loadSelectedPhotos() }
     }
 
-    // MARK: - Append Bar
+    // MARK: - Input Bar
 
-    private var appendBar: some View {
+    private var inputBar: some View {
         VStack(spacing: 8) {
-            if !loadedImages.isEmpty {
+            if isEditing {
+                HStack {
+                    Text("Editing entry")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Cancel") { cancelEditing() }
+                        .font(.caption)
+                        .foregroundStyle(.tint)
+                }
+                .padding(.horizontal, 20)
+            }
+
+            if !existingPhotoFileNames.isEmpty || !newImages.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(loadedImages.indices, id: \.self) { index in
-                            Image(uiImage: loadedImages[index])
+                        ForEach(existingPhotoFileNames, id: \.self) { fileName in
+                            ThumbnailView(fileName: fileName, size: 60)
+                        }
+                        ForEach(newImages.indices, id: \.self) { index in
+                            Image(uiImage: newImages[index])
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 60, height: 60)
@@ -84,13 +103,13 @@ struct ThreadDetailView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                TextField("Add to thread", text: $appendText)
+                TextField(isEditing ? "Edit entry" : "Add to thread", text: $inputText)
                     .focused($isInputFocused)
-                    .onSubmit { appendEntry() }
+                    .onSubmit { submitInput() }
 
                 if canSend {
-                    Button(action: appendEntry) {
-                        Image(systemName: "arrow.up.circle.fill")
+                    Button(action: submitInput) {
+                        Image(systemName: isEditing ? "checkmark.circle.fill" : "arrow.up.circle.fill")
                             .font(.title2)
                             .foregroundStyle(.tint)
                     }
@@ -109,10 +128,11 @@ struct ThreadDetailView: View {
 
     @ViewBuilder
     private func entryContent(_ entry: ThreadEntry) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: config.paragraphSpacing) {
             HStack(alignment: .top) {
                 if let text = entry.text {
                     Text(text)
+                        .font(.system(size: config.entryFontSize))
                         .multilineTextAlignment(.leading)
                         .foregroundStyle(.primary)
                 }
@@ -120,7 +140,7 @@ struct ThreadDetailView: View {
                 Spacer()
 
                 Text(formattedTimestamp(entry.createdAt))
-                    .font(.caption)
+                    .font(.system(size: config.timestampFontSize))
                     .foregroundStyle(.secondary)
             }
 
@@ -128,47 +148,90 @@ struct ThreadDetailView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(entry.photoFileNames, id: \.self) { fileName in
-                            if let image = loadImage(named: fileName) {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 120, height: 120)
-                                    .clipShape(.rect(cornerRadius: 8))
-                            }
+                            ThumbnailView(fileName: fileName, size: 120)
                         }
                     }
                 }
             }
         }
+        .contentShape(Rectangle())
+        .onTapGesture { startEditing(entry) }
     }
 
     // MARK: - Logic
 
     private var canSend: Bool {
-        !appendText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !loadedImages.isEmpty
+        !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !newImages.isEmpty || !existingPhotoFileNames.isEmpty
     }
 
-    private func appendEntry() {
+    private func startEditing(_ entry: ThreadEntry) {
+        editingEntry = entry
+        inputText = entry.text ?? ""
+        existingPhotoFileNames = entry.photoFileNames
+        newImages = []
+        selectedPhotos = []
+        isInputFocused = true
+    }
+
+    private func cancelEditing() {
+        editingEntry = nil
+        inputText = ""
+        selectedPhotos = []
+        newImages = []
+        existingPhotoFileNames = []
+        isInputFocused = false
+    }
+
+    private func submitInput() {
         guard canSend else { return }
 
+        if let entry = editingEntry {
+            updateEntry(entry)
+        } else {
+            createEntry()
+        }
+    }
+
+    private func updateEntry(_ entry: ThreadEntry) {
+        let trimmed = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        entry.text = trimmed.isEmpty ? nil : trimmed
+
+        var fileNames = existingPhotoFileNames
+        for image in newImages {
+            if let fileName = saveImageToDocuments(image) {
+                fileNames.append(fileName)
+            }
+        }
+        entry.photoFileNames = fileNames
+        thread.updatedAt = Date()
+
+        editingEntry = nil
+        inputText = ""
+        selectedPhotos = []
+        newImages = []
+        existingPhotoFileNames = []
+        isInputFocused = false
+    }
+
+    private func createEntry() {
         var fileNames: [String] = []
-        for image in loadedImages {
+        for image in newImages {
             if let fileName = saveImageToDocuments(image) {
                 fileNames.append(fileName)
             }
         }
 
-        let trimmedText = appendText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         let entry = ThreadEntry(
-            text: trimmedText.isEmpty ? nil : trimmedText,
+            text: trimmed.isEmpty ? nil : trimmed,
             photoFileNames: fileNames
         )
         thread.entries.append(entry)
         thread.updatedAt = Date()
 
-        appendText = ""
+        inputText = ""
         selectedPhotos = []
-        loadedImages = []
+        newImages = []
     }
 
     private func loadSelectedPhotos() {
@@ -180,14 +243,12 @@ struct ThreadDetailView: View {
                     images.append(image)
                 }
             }
-            loadedImages = images
+            if isEditing {
+                newImages.append(contentsOf: images)
+            } else {
+                newImages = images
+            }
         }
-    }
-
-    private func loadImage(named fileName: String) -> UIImage? {
-        let url = URL.documentsDirectory.appendingPathComponent(fileName)
-        guard let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
     }
 
     private func saveImageToDocuments(_ image: UIImage) -> String? {

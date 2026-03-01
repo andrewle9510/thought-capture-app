@@ -127,6 +127,7 @@ struct FilterChip: View {
 
 struct ThreadCard: View {
     let thread: ThoughtThread
+    @Environment(\.appearanceConfig) private var config
 
     private var previewEntries: [ThreadEntry] {
         Array(thread.entries.sorted { $0.createdAt < $1.createdAt }.prefix(3))
@@ -153,14 +154,15 @@ struct ThreadCard: View {
             }
             .padding(.top, 12)
         }
-        .padding(16)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+        .padding(config.containerPadding)
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: config.containerCornerRadius))
     }
 
     @ViewBuilder
     private func entryContent(_ entry: ThreadEntry) -> some View {
         if let text = entry.text {
             Text(text)
+                .font(.system(size: config.entryFontSize))
                 .lineLimit(3)
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(.primary)
