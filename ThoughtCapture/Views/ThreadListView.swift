@@ -6,6 +6,7 @@ struct ThreadListView: View {
     @Query(sort: \ThoughtThread.updatedAt, order: .reverse) private var threads: [ThoughtThread]
     @State private var showingCapture = false
     @State private var selectedFilter = ThreadFilter.all
+    @Environment(\.appearanceConfig) private var config
 
     enum ThreadFilter {
         case all, starred
@@ -19,7 +20,7 @@ struct ThreadListView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
+        ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     filterChips
@@ -63,23 +64,53 @@ struct ThreadListView: View {
                 .padding(.bottom, 80)
             }
 
-            Button {
-                showingCapture = true
-            } label: {
-                Image(systemName: "plus")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.black)
-                    .frame(width: 56, height: 56)
-                    .background(.white, in: Circle())
-                    .shadow(color: .black.opacity(0.25), radius: 8, y: 4)
+            // Dimming backdrop — always present, controlled by opacity
+            Color.black.opacity(showingCapture ? 0.3 : 0)
+                .ignoresSafeArea()
+                .allowsHitTesting(showingCapture)
+                .onTapGesture {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil, from: nil, for: nil
+                    )
+                    withAnimation(.spring(duration: 0.3, bounce: 0.1)) {
+                        showingCapture = false
+                    }
+                }
+
+            // Capture panel — always present, slides via offset
+            VStack(spacing: 0) {
+                Spacer()
+                CaptureView(isPresented: $showingCapture)
+                    .padding(.horizontal, config.captureHorizontalPadding)
+                    .padding(.bottom, config.captureBottomPadding)
             }
-            .padding(24)
+            .offset(y: showingCapture ? 0 : UIScreen.main.bounds.height)
+            .allowsHitTesting(showingCapture)
+
+            // FAB button — always present, fades via opacity
+            HStack {
+                Spacer()
+                Button {
+                    withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                        showingCapture = true
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                        .frame(width: 56, height: 56)
+                        .background(.white, in: Circle())
+                        .shadow(color: .black.opacity(0.25), radius: 8, y: 4)
+                }
+                .padding(24)
+            }
+            .opacity(showingCapture ? 0 : 1)
+            .scaleEffect(showingCapture ? 0.5 : 1)
+            .allowsHitTesting(!showingCapture)
         }
         .navigationTitle("Thoughts")
-        .sheet(isPresented: $showingCapture) {
-            CaptureView()
-        }
     }
 
     private var filterChips: some View {
@@ -154,8 +185,13 @@ struct ThreadCard: View {
             }
             .padding(.top, 12)
         }
-        .padding(config.containerPadding)
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: config.containerCornerRadius))
+        .padding(config.showListContainer ? config.containerPadding : 0)
+        .background {
+            if config.showListContainer {
+                RoundedRectangle(cornerRadius: config.containerCornerRadius)
+                    .fill(Color(.secondarySystemBackground))
+            }
+        }
     }
 
     @ViewBuilder

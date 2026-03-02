@@ -33,8 +33,16 @@ struct ThreadDetailView: View {
                     EntryTimeline(entries: sortedEntries) { entry in
                         entryContent(entry)
                     }
-                    .padding(.horizontal, 16)
+                    .padding(config.showDetailContainer ? config.containerPadding : 0)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .background {
+                        if config.showDetailContainer {
+                            RoundedRectangle(cornerRadius: config.containerCornerRadius)
+                                .fill(Color(.secondarySystemBackground))
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, config.detailTopSpacing)
                 }
             }
 
@@ -103,7 +111,9 @@ struct ThreadDetailView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                TextField(isEditing ? "Edit entry" : "Add to thread", text: $inputText)
+                TextField(isEditing ? "Edit entry" : "Add to thread", text: $inputText, axis: .vertical)
+                    .font(.system(size: config.editingEntryFontSize))
+                    .lineLimit(1...8)
                     .focused($isInputFocused)
                     .onSubmit { submitInput() }
 
@@ -117,7 +127,7 @@ struct ThreadDetailView: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
-            .background(Color(.secondarySystemBackground), in: Capsule())
+            .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
             .padding(.horizontal, 16)
         }
         .padding(.vertical, 8)

@@ -4,7 +4,9 @@ import SwiftData
 
 struct CaptureView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.appearanceConfig) private var config
+
+    @Binding var isPresented: Bool
 
     @State private var text = ""
     @State private var selectedPhotos: [PhotosPickerItem] = []
@@ -12,52 +14,38 @@ struct CaptureView: View {
     @FocusState private var isTextFocused: Bool
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                textInputArea
+        VStack(spacing: 0) {
+            // Text input area
+            textInputArea
 
-                if !loadedImages.isEmpty {
-                    photoThumbnails
-                }
-
-                Divider()
-
-                bottomToolbar
+            if !loadedImages.isEmpty {
+                photoThumbnails
             }
-            .navigationTitle("New Thought")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { saveThread() }
-                        .fontWeight(.semibold)
-                        .disabled(!canSave)
-                }
-            }
-            .onAppear { isTextFocused = true }
-            .onChange(of: selectedPhotos) { loadSelectedPhotos() }
+
+            // Bottom toolbar
+            bottomToolbar
         }
+        .background(Color(.secondarySystemBackground))
+        .clipShape(.rect(cornerRadius: config.captureCornerRadius, style: .continuous))
+        .shadow(color: .black.opacity(0.15), radius: 12, y: -4)
+        .onChange(of: isPresented) { _, newValue in
+            if newValue {
+                isTextFocused = true
+            }
+        }
+        .onChange(of: selectedPhotos) { loadSelectedPhotos() }
     }
 
     // MARK: - Subviews
 
     private var textInputArea: some View {
-        ZStack(alignment: .topLeading) {
-            TextEditor(text: $text)
-                .focused($isTextFocused)
-                .padding(.horizontal, 12)
-                .padding(.top, 8)
-
-            if text.isEmpty {
-                Text("What's on your mind?")
-                    .foregroundStyle(.tertiary)
-                    .padding(.horizontal, 17)
-                    .padding(.top, 16)
-                    .allowsHitTesting(false)
-            }
-        }
+        TextField("New note", text: $text, axis: .vertical)
+            .font(.system(size: config.editingEntryFontSize))
+            .focused($isTextFocused)
+            .lineLimit(1...12)
+            .padding(.horizontal, config.captureTextHorizontalPadding)
+            .padding(.top, config.captureTextTopPadding)
+            .padding(.bottom, config.captureTextBottomPadding)
     }
 
     private var photoThumbnails: some View {
@@ -67,29 +55,58 @@ struct CaptureView: View {
                     Image(uiImage: loadedImages[index])
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 80, height: 80)
+                        .frame(width: 60, height: 60)
                         .clipShape(.rect(cornerRadius: 8))
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.vertical, 6)
         }
     }
 
     private var bottomToolbar: some View {
-        HStack {
+        HStack(spacing: config.captureToolbarSpacing) {
+            Button { /* hashtag action */ } label: {
+                Image(systemName: "number")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+            }
+
+            Button { /* reminder action */ } label: {
+                Image(systemName: "bell")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+            }
+
             PhotosPicker(
                 selection: $selectedPhotos,
                 maxSelectionCount: 10,
                 matching: .images
             ) {
-                Image(systemName: "photo.on.rectangle.angled")
-                    .font(.title3)
+                Image(systemName: "photo")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
             }
+
             Spacer()
+
+            // Mic / send button
+            if canSave {
+                Button(action: saveThread) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.system(size: config.captureSendButtonSize))
+                        .foregroundStyle(.tint)
+                }
+            } else {
+                Button { /* voice capture */ } label: {
+                    Image(systemName: "mic.circle.fill")
+                        .font(.system(size: config.captureMicButtonSize))
+                        .foregroundStyle(.primary)
+                }
+            }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, config.captureToolbarHorizontalPadding)
+        .padding(.vertical, config.captureToolbarVerticalPadding)
     }
 
     // MARK: - Logic
@@ -129,7 +146,12 @@ struct CaptureView: View {
         thread.entries.append(entry)
 
         modelContext.insert(thread)
-        dismiss()
+
+        // Reset and dismiss
+        text = ""
+        loadedImages = []
+        selectedPhotos = []
+        isPresented = false
     }
 
     private func saveImageToDocuments(_ image: UIImage) -> String? {

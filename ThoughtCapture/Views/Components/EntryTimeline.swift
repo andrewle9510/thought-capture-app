@@ -27,8 +27,8 @@ struct EntryTimeline<Content: View>: View {
                     .padding(.top, 6)
 
                     content(entry)
+                        .padding(.bottom, isLast ? 0 : config.entrySpacing)
                 }
-                .padding(.bottom, isLast ? 0 : config.entrySpacing)
             }
         }
     }
