@@ -21,48 +21,62 @@ struct ThreadListView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    filterChips
-                        .padding(.horizontal, 16)
+            List {
+                filterChips
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
 
-                    if filteredThreads.isEmpty {
-                        ContentUnavailableView(
-                            "No Thoughts Yet",
-                            systemImage: "bubble.left.and.text.bubble.right",
-                            description: Text("Tap + to capture your first thought")
-                        )
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 80)
-                    } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(filteredThreads) { thread in
-                                NavigationLink {
-                                    ThreadDetailView(thread: thread)
-                                } label: {
-                                    ThreadCard(thread: thread)
+                if filteredThreads.isEmpty {
+                    ContentUnavailableView(
+                        "No Thoughts Yet",
+                        systemImage: "bubble.left.and.text.bubble.right",
+                        description: Text("Tap + to capture your first thought")
+                    )
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 80)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                } else {
+                    ForEach(filteredThreads) { thread in
+                        ThreadCard(thread: thread)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                            .background {
+                                NavigationLink(destination: ThreadDetailView(thread: thread)) {
+                                    EmptyView()
                                 }
-                                .buttonStyle(.plain)
-                                .contextMenu {
-                                    Button {
-                                        thread.isStarred.toggle()
-                                    } label: {
-                                        Label(
-                                            thread.isStarred ? "Unstar" : "Star",
-                                            systemImage: thread.isStarred ? "star.slash" : "star"
-                                        )
-                                    }
-                                    Button("Delete", role: .destructive) {
-                                        modelContext.delete(thread)
-                                    }
+                                .opacity(0)
+                            }
+                            .contextMenu {
+                                Button {
+                                    thread.isStarred.toggle()
+                                } label: {
+                                    Label(
+                                        thread.isStarred ? "Unstar" : "Star",
+                                        systemImage: thread.isStarred ? "star.slash" : "star"
+                                    )
+                                }
+                                Button("Delete", role: .destructive) {
+                                    modelContext.delete(thread)
                                 }
                             }
-                        }
-                        .padding(.horizontal, 16)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive) {
+                                    modelContext.delete(thread)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                     }
                 }
-                .padding(.bottom, 80)
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .contentMargins(.bottom, 80)
 
             // Dimming backdrop — always present, controlled by opacity
             Color.black.opacity(showingCapture ? 0.3 : 0)
