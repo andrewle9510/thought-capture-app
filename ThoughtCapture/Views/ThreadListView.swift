@@ -99,7 +99,7 @@ struct ThreadListView: View {
                     .padding(.horizontal, config.captureHorizontalPadding)
                     .padding(.bottom, config.captureBottomPadding)
             }
-            .offset(y: showingCapture ? 0 : UIScreen.main.bounds.height)
+            .offset(y: showingCapture ? 0 : 1000)
             .allowsHitTesting(showingCapture)
 
             // FAB button — always present, fades via opacity
@@ -185,7 +185,7 @@ struct ThreadCard: View {
             }
 
             HStack {
-                Text(formattedTimestamp(thread.updatedAt))
+                Text(thread.updatedAt.relativeTimestamp)
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
@@ -225,11 +225,4 @@ struct ThreadCard: View {
         }
     }
 
-    private func formattedTimestamp(_ date: Date) -> String {
-        if Calendar.current.isDateInToday(date) {
-            return date.formatted(.dateTime.hour().minute())
-        } else {
-            return date.formatted(.dateTime.month(.abbreviated).day())
-        }
-    }
 }

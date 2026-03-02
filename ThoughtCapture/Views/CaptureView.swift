@@ -133,7 +133,7 @@ struct CaptureView: View {
 
         var fileNames: [String] = []
         for image in loadedImages {
-            if let fileName = saveImageToDocuments(image) {
+            if let fileName = ImageStorage.saveToDocuments(image) {
                 fileNames.append(fileName)
             }
         }
@@ -154,15 +154,4 @@ struct CaptureView: View {
         isPresented = false
     }
 
-    private func saveImageToDocuments(_ image: UIImage) -> String? {
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
-        let fileName = UUID().uuidString + ".jpg"
-        let url = URL.documentsDirectory.appendingPathComponent(fileName)
-        do {
-            try data.write(to: url)
-            return fileName
-        } catch {
-            return nil
-        }
-    }
 }

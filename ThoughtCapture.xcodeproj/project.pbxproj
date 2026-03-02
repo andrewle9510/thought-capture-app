@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		3A86276412269C640E23785A /* ThreadListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D0C82645133E656DCCAFE7 /* ThreadListView.swift */; };
 		68E9F492D7817829B7AEDF3E /* ThreadDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B57AC4CCF42680E6E12518 /* ThreadDetailView.swift */; };
 		758B6FEC527F959F7135B981 /* ThreadEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C544F2DD906E9605D6A53C56 /* ThreadEntry.swift */; };
+		873EFA0557EAA790C7FA9936 /* Date+Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6696C2122198CF9024EEA2B /* Date+Formatting.swift */; };
 		8E2218A632E5BD6C224D23E7 /* ThoughtThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = B414A8FE119E376D32AB4224 /* ThoughtThread.swift */; };
 		91136A85577504E53FDBDDC7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FF18C01954EA4580B0A0B0 /* ContentView.swift */; };
 		AF7B8181235036D6164640E0 /* AppearanceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D35D261CFCF6F4F803BF0B /* AppearanceConfig.swift */; };
@@ -18,6 +19,7 @@
 		CC6EBE621160DC3B62473661 /* ThoughtCaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D694FA30ED5039BAEEAB58 /* ThoughtCaptureApp.swift */; };
 		E35087F155607D0F5079BB65 /* EntryTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5FDA7D3FCB6B775BA606BA /* EntryTimeline.swift */; };
 		E61997698B0B1A6271C11EEB /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F543A738BB26EDBEC2DFA326 /* CaptureView.swift */; };
+		FB02BAF07B58386BF7668AC1 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6D491CC86D8CBAB94EE89A /* ImageStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,9 +32,11 @@
 		C544F2DD906E9605D6A53C56 /* ThreadEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadEntry.swift; sourceTree = "<group>"; };
 		E10F104E098FAE9AA6BC6A8C /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		E5D694FA30ED5039BAEEAB58 /* ThoughtCaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtCaptureApp.swift; sourceTree = "<group>"; };
-		E5FC25F6572D36A8C17773F8 /* ThoughtCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThoughtCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5FC25F6572D36A8C17773F8 /* ThoughtCapture.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ThoughtCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F543A738BB26EDBEC2DFA326 /* CaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureView.swift; sourceTree = "<group>"; };
+		F6696C2122198CF9024EEA2B /* Date+Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatting.swift"; sourceTree = "<group>"; };
 		F8D35D261CFCF6F4F803BF0B /* AppearanceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceConfig.swift; sourceTree = "<group>"; };
+		FB6D491CC86D8CBAB94EE89A /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -52,6 +56,7 @@
 				B478CB895FA770E32F4CD247 /* Assets.xcassets */,
 				E5D694FA30ED5039BAEEAB58 /* ThoughtCaptureApp.swift */,
 				1F01501CE4515A13B03C555D /* Models */,
+				515C108CC4023640BCAD624D /* Utilities */,
 				512901B542278533B90690AC /* Views */,
 			);
 			path = ThoughtCapture;
@@ -76,6 +81,15 @@
 				4B936CD56B68EEB4C5FEAB99 /* Components */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		515C108CC4023640BCAD624D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F6696C2122198CF9024EEA2B /* Date+Formatting.swift */,
+				FB6D491CC86D8CBAB94EE89A /* ImageStorage.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		993EC2DE58EF7917FF5BC80D = {
@@ -122,7 +136,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 1430;
 			};
 			buildConfigurationList = 791D374F298DCC21D8264A28 /* Build configuration list for PBXProject "ThoughtCapture" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -134,6 +148,7 @@
 			);
 			mainGroup = 993EC2DE58EF7917FF5BC80D;
 			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -161,7 +176,9 @@
 				AF7B8181235036D6164640E0 /* AppearanceConfig.swift in Sources */,
 				E61997698B0B1A6271C11EEB /* CaptureView.swift in Sources */,
 				91136A85577504E53FDBDDC7 /* ContentView.swift in Sources */,
+				873EFA0557EAA790C7FA9936 /* Date+Formatting.swift in Sources */,
 				E35087F155607D0F5079BB65 /* EntryTimeline.swift in Sources */,
+				FB02BAF07B58386BF7668AC1 /* ImageStorage.swift in Sources */,
 				CC6EBE621160DC3B62473661 /* ThoughtCaptureApp.swift in Sources */,
 				8E2218A632E5BD6C224D23E7 /* ThoughtThread.swift in Sources */,
 				68E9F492D7817829B7AEDF3E /* ThreadDetailView.swift in Sources */,
@@ -211,7 +228,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -268,7 +284,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;

@@ -149,7 +149,7 @@ struct ThreadDetailView: View {
 
                 Spacer()
 
-                Text(formattedTimestamp(entry.createdAt))
+                Text(entry.createdAt.relativeTimestamp)
                     .font(.system(size: config.timestampFontSize))
                     .foregroundStyle(.secondary)
             }
@@ -208,7 +208,7 @@ struct ThreadDetailView: View {
 
         var fileNames = existingPhotoFileNames
         for image in newImages {
-            if let fileName = saveImageToDocuments(image) {
+            if let fileName = ImageStorage.saveToDocuments(image) {
                 fileNames.append(fileName)
             }
         }
@@ -226,7 +226,7 @@ struct ThreadDetailView: View {
     private func createEntry() {
         var fileNames: [String] = []
         for image in newImages {
-            if let fileName = saveImageToDocuments(image) {
+            if let fileName = ImageStorage.saveToDocuments(image) {
                 fileNames.append(fileName)
             }
         }
@@ -261,23 +261,4 @@ struct ThreadDetailView: View {
         }
     }
 
-    private func saveImageToDocuments(_ image: UIImage) -> String? {
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
-        let fileName = UUID().uuidString + ".jpg"
-        let url = URL.documentsDirectory.appendingPathComponent(fileName)
-        do {
-            try data.write(to: url)
-            return fileName
-        } catch {
-            return nil
-        }
-    }
-
-    private func formattedTimestamp(_ date: Date) -> String {
-        if Calendar.current.isDateInToday(date) {
-            return date.formatted(.dateTime.hour().minute())
-        } else {
-            return date.formatted(.dateTime.month(.abbreviated).day())
-        }
-    }
 }

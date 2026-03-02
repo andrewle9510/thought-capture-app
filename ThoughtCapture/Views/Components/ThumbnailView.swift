@@ -5,8 +5,9 @@ struct ThumbnailView: View {
     let size: CGFloat
 
     @State private var image: UIImage?
+    @Environment(\.displayScale) private var displayScale
 
-    private var pixelSize: CGFloat { size * UIScreen.main.scale }
+    private var pixelSize: CGFloat { size * displayScale }
 
     var body: some View {
         Group {
